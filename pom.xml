@@ -37,11 +37,11 @@
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.telegram/telegrambots -->
         <!-- https://mvnrepository.com/artifact/org.telegram/telegrambots -->
-        <dependency>
+       <!-- <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots</artifactId>
             <version>2.4.0</version>
-        </dependency>
+        </dependency>-->
 
 
     </dependencies>
