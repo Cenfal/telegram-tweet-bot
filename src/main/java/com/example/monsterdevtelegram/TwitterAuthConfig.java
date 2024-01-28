@@ -1,10 +1,7 @@
 package com.example.monsterdevtelegram;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.example.monsterdevtelegram.helper.TwitterOauthHeaderGenerator;
 
 @Configuration
 public class TwitterAuthConfig {
@@ -21,9 +18,35 @@ public class TwitterAuthConfig {
     @Value("${twitter.oauth.accessTokenSecret}")
     private String tokenSecret;
 
-    @Bean
-    TwitterOauthHeaderGenerator twitterOauthHeaderGenerator() {
-        return new TwitterOauthHeaderGenerator(consumerKey, consumerSecret, token, tokenSecret);
+    public String getConsumerKey() {
+        return consumerKey;
     }
 
+    public void setConsumerKey(String consumerKey) {
+        this.consumerKey = consumerKey;
+    }
+
+    public String getConsumerSecret() {
+        return consumerSecret;
+    }
+
+    public void setConsumerSecret(String consumerSecret) {
+        this.consumerSecret = consumerSecret;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getTokenSecret() {
+        return tokenSecret;
+    }
+
+    public void setTokenSecret(String tokenSecret) {
+        this.tokenSecret = tokenSecret;
+    }
 }

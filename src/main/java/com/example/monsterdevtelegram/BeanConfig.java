@@ -1,8 +1,9 @@
 package com.example.monsterdevtelegram;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
@@ -11,18 +12,11 @@ import io.github.redouane59.twitter.TwitterClient;
 import io.github.redouane59.twitter.signature.TwitterCredentials;
 
 @Configuration
+@Import(TwitterAuthConfig.class)
 public class BeanConfig {
-    @Value("${twitter.oauth.consumerKey}")
-    private String consumerKey;
 
-    @Value("${twitter.oauth.consumerSecret}")
-    private String consumerSecret;
-
-    @Value("${twitter.oauth.accessToken}")
-    private String token;
-
-    @Value("${twitter.oauth.accessTokenSecret}")
-    private String tokenSecret;
+    @Autowired
+    TwitterAuthConfig twitterAuthConfig;
     @Bean
     MyAmazingBot myAmazingBot(){
         return new MyAmazingBot();
@@ -37,7 +31,10 @@ public class BeanConfig {
     }
     @Bean
     TwitterCredentials twitterCredentials(){
-        return TwitterCredentials.builder().accessToken(token).accessTokenSecret(tokenSecret).apiKey(consumerKey).apiSecretKey(consumerSecret).build();
+        return TwitterCredentials.builder().accessToken(twitterAuthConfig.getToken())
+                .accessTokenSecret(twitterAuthConfig.getTokenSecret())
+                .apiKey(twitterAuthConfig.getConsumerKey())
+                .apiSecretKey(twitterAuthConfig.getConsumerSecret()).build();
     }
     @Bean
     TwitterClient twitterClient(){
