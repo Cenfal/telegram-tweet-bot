@@ -11,12 +11,7 @@ public class MonsterdevtelegramApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(MonsterdevtelegramApplication.class, args);
-        try {
-            TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-            botsApi.registerBot(new MyAmazingBot());
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+
     }
 
 }
