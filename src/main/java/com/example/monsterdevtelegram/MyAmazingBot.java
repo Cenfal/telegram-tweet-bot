@@ -84,23 +84,6 @@ public class MyAmazingBot extends TelegramLongPollingBot {
         }
     }
 
-    private void postTweetFloodWithMedia(List<String> uploadMediaResponseList, String translatedTweet) {
-        List<String> parsedTranslatedTweet = parseSubstrings(translatedTweet);
-        Tweet tweet = null;
-        for (String truncatedTranslatedTextTweet : parsedTranslatedTweet) {
-            if (tweet != null) {
-                tweet = postTweet(TweetParameters.builder().text(truncatedTranslatedTextTweet).reply(TweetParameters.Reply.builder().inReplyToTweetId(tweet.getId()).build()), uploadMediaResponseList);
-                try {
-                    TimeUnit.SECONDS.sleep(10);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            } else {
-                tweet = postTweet(TweetParameters.builder().text(truncatedTranslatedTextTweet), uploadMediaResponseList);
-            }
-        }
-    }
-
     @Override
     public void onUpdateReceived(Update update) {
         logger.log(Level.INFO, "Update received with update id: " + update.getUpdateId() + " and media group id: " + update.getChannelPost().getMediaGroupId());
@@ -137,7 +120,7 @@ public class MyAmazingBot extends TelegramLongPollingBot {
             throw new RuntimeException(e.getMessage());
         } finally {
             try {
-                FileUtils.cleanDirectory(new java.io.File("./resources/telgramphoto/"));
+                FileUtils.cleanDirectory(new java.io.File("./resources/telegramphoto/"));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -145,9 +128,26 @@ public class MyAmazingBot extends TelegramLongPollingBot {
 
     }
 
+    private void postTweetFloodWithMedia(List<String> uploadMediaResponseList, String translatedTweet) {
+        List<String> parsedTranslatedTweet = parseSubstrings(translatedTweet);
+        Tweet tweet = null;
+        for (String truncatedTranslatedTextTweet : parsedTranslatedTweet) {
+            if (tweet != null) {
+                tweet = postTweet(TweetParameters.builder().text(truncatedTranslatedTextTweet).reply(TweetParameters.Reply.builder().inReplyToTweetId(tweet.getId()).build()), uploadMediaResponseList);
+                try {
+                    TimeUnit.SECONDS.sleep(10);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                tweet = postTweet(TweetParameters.builder().text(truncatedTranslatedTextTweet), uploadMediaResponseList);
+            }
+        }
+    }
+
     private Optional<UploadMediaResponse> uploadTwitterChunkedMedia(String getID) {
         logger.log(Level.INFO, "TwitterClient upload Chunked Media Call");
-        return twitterClient.uploadChunkedMedia(new java.io.File("./resources/telgramphoto/" + getID + ".jpg"), MediaCategory.TWEET_IMAGE);
+        return twitterClient.uploadChunkedMedia(new java.io.File("./resources/telegramphoto/" + getID + ".jpg"), MediaCategory.TWEET_IMAGE);
     }
 
     private Tweet postTweet(TweetParameters.TweetParametersBuilder builder, List<String> mediaIdList) {
