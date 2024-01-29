@@ -8,15 +8,22 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
+import com.azure.ai.translation.text.TextTranslationClient;
+import com.azure.ai.translation.text.TextTranslationClientBuilder;
+import com.azure.core.credential.AzureKeyCredential;
+
 import io.github.redouane59.twitter.TwitterClient;
 import io.github.redouane59.twitter.signature.TwitterCredentials;
 
 @Configuration
-@Import(TwitterAuthConfig.class)
+@Import({TwitterAuthConfig.class,MSTranslatorConfig.class})
 public class BeanConfig {
 
     @Autowired
     TwitterAuthConfig twitterAuthConfig;
+
+    @Autowired
+    MSTranslatorConfig msTranslatorConfig;
     @Bean
     MyAmazingBot myAmazingBot(){
         return new MyAmazingBot();
@@ -39,6 +46,15 @@ public class BeanConfig {
     @Bean
     TwitterClient twitterClient(){
         return new TwitterClient(twitterCredentials());
+    }
+    @Bean
+    TextTranslationClient msTextTranslationClient(){
+        AzureKeyCredential credential = new AzureKeyCredential(msTranslatorConfig.getMicrosoftTranslatorKey());
+
+        return new TextTranslationClientBuilder()
+                .credential(credential)
+                .region("germanywestcentral")
+                .buildClient();
     }
 
 
