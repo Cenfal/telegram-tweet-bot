@@ -1,12 +1,10 @@
 package com.example.monsterdevtelegram;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
-import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
-import org.telegram.telegrambots.meta.api.objects.File;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -27,7 +23,6 @@ import com.azure.ai.translation.text.models.ProfanityAction;
 import com.azure.ai.translation.text.models.ProfanityMarker;
 import com.azure.ai.translation.text.models.TextType;
 import com.azure.ai.translation.text.models.TranslatedTextItem;
-import com.twitter.clientlib.model.Media;
 
 import io.github.redouane59.twitter.TwitterClient;
 import io.github.redouane59.twitter.dto.tweet.MediaCategory;
@@ -65,7 +60,7 @@ public class MyAmazingBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        logger.log(Level.INFO, "Update received with update id"+update.getUpdateId());
+        logger.log(Level.INFO, "Update received with update id: "+update.getUpdateId());
         Message message = update.getChannelPost();
         List<PhotoSize> photos = message.getPhoto();
         String getID = null;
@@ -84,20 +79,26 @@ public class MyAmazingBot extends TelegramLongPollingBot {
                 Optional<UploadMediaResponse> uploadMediaResponse = twitterClient.uploadChunkedMedia(new java.io.File("./resources/telgramphoto/" + getID + ".jpg"), MediaCategory.TWEET_IMAGE);
                 if (uploadMediaResponse.isPresent()) {
                     String truncatedTranslatedTextTweet = truncateString(translatedTweet, 120);
-
-                    TweetParameters tweetParameters1 = TweetParameters.builder()
-                            .text(truncatedTranslatedTextTweet)
-                            .media(TweetParameters.Media.builder()
-                                    .mediaIds(Arrays.asList(uploadMediaResponse.get().getMediaId())).build())
-                            .build();
-                    twitterClient.postTweet(tweetParameters1);
+                    //post tweet with media and text
+                    postTweet(TweetParameters.builder().text(truncatedTranslatedTextTweet), uploadMediaResponse);
 
                 }
-            }
-        } catch (RuntimeException e) {
+            } else {
+                Optional<UploadMediaResponse> uploadMediaResponse = twitterClient.uploadChunkedMedia(new java.io.File("./resources/telgramphoto/" + getID + ".jpg"), MediaCategory.TWEET_IMAGE);
+                if (uploadMediaResponse.isPresent()) {
+                    //post tweet with media-only
+                    postTweet(TweetParameters.builder(), uploadMediaResponse);
+                }
+        }
+        }catch (RuntimeException e) {
             throw new RuntimeException(e.getMessage());
         }
 
+    }
+
+    private void postTweet(TweetParameters.TweetParametersBuilder builder, Optional<UploadMediaResponse> uploadMediaResponse) {
+        TweetParameters tweetParameters1 = builder.media(TweetParameters.Media.builder().mediaIds(Arrays.asList(uploadMediaResponse.get().getMediaId())).build()).build();
+        twitterClient.postTweet(tweetParameters1);
     }
 
     private void postTextTweet(String tweetText) {
