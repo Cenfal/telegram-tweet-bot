@@ -16,7 +16,7 @@ import io.github.redouane59.twitter.TwitterClient;
 import io.github.redouane59.twitter.signature.TwitterCredentials;
 
 @Configuration
-@Import({TwitterAuthConfig.class,MSTranslatorConfig.class})
+@Import({ TwitterAuthConfig.class, MSTranslatorConfig.class })
 public class BeanConfig {
 
     @Autowired
@@ -24,41 +24,36 @@ public class BeanConfig {
 
     @Autowired
     MSTranslatorConfig msTranslatorConfig;
+
     @Bean
-    MyAmazingBot myAmazingBot(){
+    MyAmazingBot myAmazingBot() {
         return new MyAmazingBot();
     }
+
     @Bean
-    TelegramBotsApi telegramBotsApi(){
+    TelegramBotsApi telegramBotsApi() {
         try {
             return new TelegramBotsApi(DefaultBotSession.class);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
     }
+
     @Bean
-    TwitterCredentials twitterCredentials(){
-        return TwitterCredentials.builder().accessToken(twitterAuthConfig.getToken())
-                .accessTokenSecret(twitterAuthConfig.getTokenSecret())
-                .apiKey(twitterAuthConfig.getConsumerKey())
-                .apiSecretKey(twitterAuthConfig.getConsumerSecret()).build();
+    TwitterCredentials twitterCredentials() {
+        return TwitterCredentials.builder().accessToken(twitterAuthConfig.getToken()).accessTokenSecret(twitterAuthConfig.getTokenSecret()).apiKey(twitterAuthConfig.getConsumerKey()).apiSecretKey(twitterAuthConfig.getConsumerSecret()).build();
     }
+
     @Bean
-    TwitterClient twitterClient(){
+    TwitterClient twitterClient() {
         return new TwitterClient(twitterCredentials());
     }
+
     @Bean
-    TextTranslationClient msTextTranslationClient(){
+    TextTranslationClient msTextTranslationClient() {
         AzureKeyCredential credential = new AzureKeyCredential(msTranslatorConfig.getMicrosoftTranslatorKey());
 
-        return new TextTranslationClientBuilder()
-                .credential(credential)
-                .region("germanywestcentral")
-                .buildClient();
+        return new TextTranslationClientBuilder().credential(credential).region("germanywestcentral").buildClient();
     }
-
-
-
-
 
 }

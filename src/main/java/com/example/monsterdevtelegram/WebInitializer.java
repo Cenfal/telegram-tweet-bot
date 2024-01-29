@@ -10,13 +10,13 @@ import jakarta.annotation.PostConstruct;
 @Component
 public class WebInitializer {
 
-
     @Autowired
     TelegramBotsApi telegramBotsApi;
     @Autowired
     MyAmazingBot myAmazingBot;
+
     @PostConstruct
-    void postconstrustmethod(){
+    void postconstrustmethod() {
         try {
             telegramBotsApi.registerBot(myAmazingBot);
         } catch (TelegramApiException e) {
