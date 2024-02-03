@@ -23,9 +23,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.Video;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import com.azure.ai.translation.text.TextTranslationClient;
+/*import com.azure.ai.translation.text.TextTranslationClient;
 import com.azure.ai.translation.text.models.InputTextItem;
-import com.azure.ai.translation.text.models.TranslatedTextItem;
+import com.azure.ai.translation.text.models.TranslatedTextItem;*/
 import com.google.cloud.translate.Translate;
 import com.google.cloud.translate.Translation;
 
@@ -42,8 +42,8 @@ public class MyAmazingBot extends TelegramLongPollingBot {
     Logger logger = Logger.getLogger(MyAmazingBot.class.getName());
     @Autowired
     TwitterClient twitterClient;
-    @Autowired
-    TextTranslationClient textTranslationClient;
+/*    @Autowired
+    TextTranslationClient textTranslationClient;*/
     @Autowired
     Translate googleTranslate;
 
@@ -224,9 +224,9 @@ public class MyAmazingBot extends TelegramLongPollingBot {
         String from = "en";
         List<String> targetLanguages = new ArrayList<>();
         targetLanguages.add("tr");
-        List<InputTextItem> content = new ArrayList<>();
+/*        List<InputTextItem> content = new ArrayList<>();
         content.add(new InputTextItem(originalTweet));
-        List<TranslatedTextItem> translations;
+        List<TranslatedTextItem> translations;*/
         Translation translation;
         String translationGoogleTranslateAdvanced;
         try {

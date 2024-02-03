@@ -10,9 +10,9 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
-import com.azure.ai.translation.text.TextTranslationClient;
+/*import com.azure.ai.translation.text.TextTranslationClient;
 import com.azure.ai.translation.text.TextTranslationClientBuilder;
-import com.azure.core.credential.AzureKeyCredential;
+import com.azure.core.credential.AzureKeyCredential;*/
 import com.google.cloud.translate.Translate;
 import com.google.cloud.translate.TranslateOptions;
 import com.google.cloud.translate.v3.LocationName;
@@ -61,12 +61,12 @@ public class BeanConfig {
         return new TwitterClient(twitterCredentials());
     }
 
-    @Bean
+/*    @Bean
     TextTranslationClient msTextTranslationClient() {
         AzureKeyCredential credential = new AzureKeyCredential(msTranslatorConfig.getMicrosoftTranslatorKey());
 
         return new TextTranslationClientBuilder().credential(credential).region(msTranslatorConfig.getMicrosoftTranslatorRegion()).buildClient();
-    }
+    }*/
 
     @Bean
     Translate googleTranslate(){
