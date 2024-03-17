@@ -242,6 +242,7 @@ public class MyAmazingBot extends TelegramLongPollingBot {
                 throw new RuntimeException(e);
             }
         } catch (RuntimeException e) {
+            logger.log(Level.INFO, e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
         //return translations.get(0).getTranslations().get(0).getText();
